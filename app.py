@@ -466,17 +466,7 @@ def render_sidebar():
 
 def render_schema(con):
     with st.expander("Schema", expanded=False):
-        lines = []
-        for table, spec in seed.TABLES.items():
-            lines.append(f"-- {seed.TABLE_NOTES[table]}")
-            lines.append(f"{table} (")
-            width = max(len(c) for c, _, _ in spec)
-            for i, (col, typ, note) in enumerate(spec):
-                comma = "," if i < len(spec) - 1 else ""
-                comment = f"  -- {note}" if note else ""
-                lines.append(f"  {col.ljust(width)}  {typ}{comma}{comment}")
-            lines.append(")\n")
-        st.code("\n".join(lines).rstrip(), language="sql")
+        st.code(seed.schema_text(), language="sql")
 
         st.caption("Preview 10 rows:")
         previews = st.session_state.previews

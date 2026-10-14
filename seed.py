@@ -230,10 +230,31 @@ def generate(today: date) -> dict:
     }
 
 
+# A couple of BigQuery-isms so GoogleSQL habits don't error out.
+COMPAT_MACROS = [
+    "CREATE OR REPLACE MACRO safe_divide(a, b) AS CASE WHEN b = 0 THEN NULL ELSE a / b END",
+    "CREATE OR REPLACE MACRO date_sub(d, i) AS d - i",
+]
+
+
 def add_compat_macros(con):
-    """A couple of BigQuery-isms so GoogleSQL habits don't error out."""
-    con.execute("CREATE OR REPLACE MACRO safe_divide(a, b) AS CASE WHEN b = 0 THEN NULL ELSE a / b END")
-    con.execute("CREATE OR REPLACE MACRO date_sub(d, i) AS d - i")
+    for sql in COMPAT_MACROS:
+        con.execute(sql)
+
+
+def schema_text() -> str:
+    """The schema as commented pseudo-DDL, for display."""
+    lines = []
+    for table, spec in TABLES.items():
+        lines.append(f"-- {TABLE_NOTES[table]}")
+        lines.append(f"{table} (")
+        width = max(len(c) for c, _, _ in spec)
+        for i, (col, typ, note) in enumerate(spec):
+            comma = "," if i < len(spec) - 1 else ""
+            comment = f"  -- {note}" if note else ""
+            lines.append(f"  {col.ljust(width)}  {typ}{comma}{comment}")
+        lines.append(")\n")
+    return "\n".join(lines).rstrip()
 
 
 def create_connection() -> duckdb.DuckDBPyConnection:

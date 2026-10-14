@@ -3,6 +3,8 @@
 1. Every planted edge case exists in the seeded data.
 2. Every reference solution runs and returns rows.
 3. The grader accepts alternate correct answers and rejects common mistakes.
+4. The Streamlit UI grades every pasted reference solution as correct.
+5. The GitHub Pages data in docs/ matches the Python sources.
 """
 
 import sys
@@ -214,6 +216,12 @@ for p in PROBLEMS:
           not at.exception and at.session_state.status[pid] == "correct")
 at.button(key="reveal_7").click().run()
 check("solution shown after a check", any("DATE_DIFF" in c.value for c in at.code))
+
+print("\nGitHub Pages build")
+import build_site  # noqa: E402
+
+check("docs/site-data.json is up to date (run python build_site.py)",
+      build_site.OUT.read_text(encoding="utf-8") == build_site.build())
 
 print()
 if failures:

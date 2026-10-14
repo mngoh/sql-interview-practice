@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SQL Interview Practice</title>
+  <meta name="description" content="Write SQL by hand, then check it against a hidden reference. Runs in your browser on DuckDB-WASM.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%232f6fdf'/><ellipse cx='16' cy='9' rx='9' ry='3.5' fill='white'/><path d='M7 9v14c0 2 4 3.5 9 3.5s9-1.5 9-3.5V9' fill='none' stroke='white' stroke-width='2.5'/><path d='M7 16c0 2 4 3.5 9 3.5s9-1.5 9-3.5' fill='none' stroke='white' stroke-width='2.5'/></svg>">
+  <link rel="stylesheet" href="style.css">
+  <script type="module" src="app.js"></script>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <h2>Problems</h2>
+      <nav id="nav" aria-label="Problems"></nav>
+      <p class="muted small" id="progress"></p>
+      <hr>
+      <p class="muted small" id="dbinfo">Loading DuckDB (about 10 MB, first visit only)…</p>
+      <div class="row wrap">
+        <button id="reset-db" class="btn small" title="Rebuild the seeded tables">Reset database</button>
+        <button id="reset-progress" class="btn small" title="Clear drafts, statuses and timers">Reset progress</button>
+      </div>
+    </aside>
+
+    <main>
+      <header>
+        <h1>SQL interview practice</h1>
+        <p class="muted">Google Ads abuse dataset · write the query by hand, paste it here, check it.
+          Columns are compared by position, row order is ignored, floats are rounded to 4 decimals,
+          and NULL equals NULL. Everything runs in your browser on DuckDB-WASM.</p>
+      </header>
+
+      <div class="tabs" role="tablist">
+        <button role="tab" data-tab="sql">SQL problems</button>
+        <button role="tab" data-tab="py">Python concepts</button>
+      </div>
+
+      <section id="tab-sql" role="tabpanel">
+        <div class="problem-head">
+          <h2 id="p-title"></h2>
+          <div class="timer" id="timer">
+            <span class="clock" id="timer-clock"></span>
+            <span id="timer-note"></span>
+            <a href="#" id="timer-reset" title="Restart the timer on your next keystroke">reset</a>
+            <div class="bar"><div id="timer-fill"></div></div>
+          </div>
+        </div>
+        <div id="p-prompt" class="md"></div>
+        <p id="p-return"></p>
+
+        <details class="panel">
+          <summary>Schema</summary>
+          <pre class="code" id="schema"></pre>
+          <p class="muted small">Preview 10 rows:</p>
+          <div class="row wrap" id="preview-buttons"></div>
+          <div id="previews"></div>
+        </details>
+        <details class="panel">
+          <summary>Dialect notes: DuckDB vs BigQuery</summary>
+          <div class="md" id="dialect"></div>
+        </details>
+
+        <textarea id="sql" spellcheck="false" autocapitalize="off" autocomplete="off"
+          placeholder="Write it by hand first, then paste it here.&#10;&#10;SELECT ..."></textarea>
+        <div class="row">
+          <button id="check" class="btn primary" disabled>Loading DuckDB…</button>
+          <button id="reveal" class="btn" disabled>Show solution</button>
+          <span class="muted small shortcut">⌘/Ctrl + Enter to check</span>
+        </div>
+
+        <div id="result" aria-live="polite"></div>
+        <div id="edge"></div>
+        <div id="solution"></div>
+      </section>
+
+      <section id="tab-py" role="tabpanel" hidden>
+        <h2>Python concepts</h2>
+        <p class="muted">Answer out loud first, then open the card.</p>
+        <div id="cards"></div>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

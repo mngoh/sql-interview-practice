@@ -9,6 +9,9 @@ covering anti-joins, top-N with ties, LAG, self-joins, two-grain ratios, dedup t
 date math, each with the edge cases worth saying out loud. A 12-minute per-problem timer starts
 on your first keystroke, and a second tab has Python and pandas flashcards.
 
+**Try it in the browser:** https://mngoh.github.io/sql-interview-practice/ (runs entirely client-side
+on DuckDB-WASM; your drafts and progress are saved in your browser).
+
 ## Schema
 
 ```sql
@@ -37,7 +40,23 @@ streamlit run app.py
 ```
 
 `python verify.py` checks that every planted edge case exists, that every reference solution
-returns rows, and that the grader accepts alternate correct answers and rejects common mistakes.
+returns rows, that the grader accepts alternate correct answers and rejects common mistakes, and
+that the GitHub Pages data is up to date.
+
+## GitHub Pages version
+
+`docs/` is a static version of the app served by GitHub Pages (branch `main`, folder `/docs`). It
+runs the same problems, seed data and grading rules on DuckDB-WASM in the browser. Its content
+comes from `docs/site-data.json`, which `build_site.py` generates from `seed.py`, `problems.py`
+and `app.py`. After changing any of those, rebuild and commit:
+
+```bash
+python build_site.py
+```
+
+To preview it locally, serve the folder (`python -m http.server --directory docs`) and open
+http://localhost:8000. On a static site the reference solutions are in the page source, so the
+hidden solutions are only hidden from the UI.
 
 ## Files
 
@@ -47,6 +66,8 @@ returns rows, and that the grader accepts alternate correct answers and rejects 
 | `seed.py` | Schema and deterministic data generation |
 | `problems.py` | Problems, reference solutions, edge cases |
 | `verify.py` | Self-check for data, solutions, grader and UI |
+| `build_site.py` | Exports data, problems and flashcards to `docs/site-data.json` |
+| `docs/` | Static GitHub Pages version (HTML, CSS, JS on DuckDB-WASM) |
 
 ## Deploy (Streamlit Community Cloud)
 
